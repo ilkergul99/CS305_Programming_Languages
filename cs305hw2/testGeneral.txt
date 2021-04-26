@@ -1,0 +1,74 @@
+[
+-00000000000000000.0000000000000000000
+1
+12
+123
+1234
+12345
+123456
+1234567
+12345678
+123456789
+12345678910
+1234567891011
+["Return"]
+["Return", 1]
+["Return", 'found']
+["Return", [ "*", ["Get", "count"], ["Get", "costPerOccurrence", [1,2] ]]]
+["Return", ["Get", "X"]]
+["Return", ["Function", ["X","Y"],
+      [
+       	["Set", "Z", ["+" , ["Get", "X"], ["Get", "Y"]]]
+        ["Return", ["Get", "Z"]]
+      ]
+       	]
+]
+
+[ "*", ["Get", "count"], ["Get", "display", [["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]] ,
+["Get", "display", [["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]]  ]],
+["Get", "display", [["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]]  ]],
+000000000000.0000000000000000, [ "/", ["Get", "WeeklyBudget"], 7], ["Function", ["X", "Y"],
+[
+  [ "Print", ['Start of the function.']]
+  [ "If", [">", ["Get", "X"], ["Get", "Y"]],
+    [
+      [ "Print", ['X is greater than Y'] ]
+] [
+      [ "Print", ['X is NOT greater than Y'] ]
+    ]
+]
+  ["Print", ['End of the function.']]
+]
+]
+ ]]
+  ]
+
+[ "+", 1, 2]
+[ "-", ["Get", "endTime"], ["Get", "startTime"]]
+[ "*", ["Get", "count"], ["Get", "costPerOccurrence", [1,2] ]]
+[ "/", ["Get", "WeeklyBudget"], 7]
+[ "+", ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]] ]
+
+["Get", "sum", [1,2]]
+["Get", "display", []]
+["Get", "display", [["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]]  ]]
+["Get", "display", [["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]] ,
+["Get", "display", [["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]]  ]],
+["Get", "display", [["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]], ["<=", 5, ["Get", "foo", [1, ["Get", "Y"]]]]  ]],
+000000000000.0000000000000000, [ "/", ["Get", "WeeklyBudget"], 7], ["Function", ["X", "Y"],
+[
+  [ "Print", ['Start of the function.']]
+  [ "If", [">", ["Get", "X"], ["Get", "Y"]],
+    [
+      [ "Print", ['X is greater than Y'] ]
+] [
+      [ "Print", ['X is NOT greater than Y'] ]
+    ]
+]
+  ["Print", ['End of the function.']]
+]
+]
+ ]]
+
+
+]
