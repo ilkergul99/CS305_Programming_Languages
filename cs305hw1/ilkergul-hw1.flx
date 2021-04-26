@@ -1,0 +1,183 @@
+%{
+int stringstart = 1;
+int currentline = 1;
+int i = 0;
+int iter = 0;
+char numformatter[200];
+%}
+
+%%
+" "
+"\n"  currentline++;
+"\"Get\""       printf("%d tGET\n", currentline);
+"\"Set\""       printf("%d tSET\n", currentline);
+"\"Function\""  printf("%d tFUNCTION\n", currentline);
+"\"Print\""     printf("%d tPRINT\n", currentline);
+"\"For\""       printf("%d tFOR\n", currentline);
+"\"If\""        printf("%d tIF\n", currentline);
+"\"Return\""    printf("%d tRETURN\n", currentline);
+
+"\"+\""    printf("%d tPLUS\n", currentline);
+"\"==\""   printf("%d tEQUALITY\n", currentline);
+"\"-\""    printf("%d tMINUS\n", currentline);
+"\"*\""	   printf("%d tMUL\n", currentline);
+"\"/\""    printf("%d tDIV\n", currentline);
+"\"--\""   printf("%d tDEC\n", currentline);
+"\"++\""   printf("%d tINC\n", currentline);
+"\"<\""    printf("%d tLT\n", currentline);
+"\">\""    printf("%d tGT\n", currentline);
+"\">=\""   printf("%d tGEQ\n", currentline);
+"\"<=\""   printf("%d tLEQ\n", currentline);
+","        printf("%d tCOMMA\n", currentline);
+"["        printf("%d tLBRAC\n", currentline);
+"]"        printf("%d tRBRAC\n", currentline);
+
+["][_a-zA-Z][_A-Za-z0-9]*["]	  {
+  for(i = 0; i< sizeof(numformatter); i++)
+  {
+    numformatter[i] = '\0';
+  }  
+  for(iter = 1, i = 0; iter < yyleng; iter++)
+  {
+    if(yytext[iter] != '\"')
+    {
+      numformatter[i] = yytext[iter];
+      i++;
+    }
+    else
+    {
+      break;
+    }
+  }
+  REJECT;
+}
+
+["][_a-zA-Z][_A-Za-z0-9]*["]	  {
+  printf("%d tIDENT (%s)\n", currentline, numformatter);
+  
+}
+
+-?[0-9]+"."[0-9]+   {
+  for(i = 0; i < sizeof(numformatter); i++)
+  {
+    numformatter[i] = '\0';
+  }
+  int zerocount = 1;
+  for(iter = 0, i = 0; iter < yyleng; iter++ )
+  {
+    if(yytext[iter] == '.')
+    {
+      if(i == 0)
+      {
+        numformatter[i] = '0';
+        i++;  
+      }
+      else if(numformatter[i-1] == '-')
+      {
+        numformatter[i] = '0';
+        i++;
+      }
+      numformatter[i] = yytext[iter];
+      i++;
+      break;
+    }
+    else if((yytext[iter] != '0') || (zerocount == 0))
+    {
+      numformatter[i] = yytext[iter];
+      if(yytext[iter] != '-')
+      {
+        zerocount = 0;
+      }
+      i++;
+    }
+  }
+  int lastprecision = yyleng -1;
+  for(;lastprecision > iter; lastprecision = lastprecision -1)
+  {
+    if(yytext[lastprecision] != '0')
+    {
+      break;
+    }
+  }
+  iter = iter + 1;
+  if(iter > lastprecision)
+  {
+    numformatter[i] = '0';
+    i = i + 1;
+  }
+  for(;iter <= lastprecision; iter++)
+  {
+    numformatter[i] = yytext[iter];
+    i = i + 1;
+  }
+  REJECT;
+}
+
+-?[0-9]+"."[0-9]+   {    
+  printf("%d tNUM (%s) (%s)\n", currentline, yytext, numformatter);
+} 
+
+-?[0-9]+ {
+  for(i = 0; i < sizeof(numformatter); i++)
+  {
+    numformatter[i] = '\0';
+  }
+  int zerocount = 1;
+  for(iter = 0, i = 0; iter < yyleng; iter++)
+  {
+    if(iter == yyleng-1)
+    {
+      numformatter[i] = yytext[iter];
+      i++;
+    }
+    else if((yytext[iter] != '0') || (zerocount == 0))
+    {
+      numformatter[i] = yytext[iter];
+      if(yytext[iter] != '-')
+      {
+        zerocount = 0;
+      }
+      i++;
+    }
+  }
+  REJECT;
+}
+
+-?[0-9]+ {   
+   printf("%d tNUM (%s) (%s)\n", currentline, yytext, numformatter);
+}
+['][^']*['] {
+  for(i=0; i < sizeof(numformatter); i++)
+  {
+    numformatter[i] = '\0'; 
+  }
+  stringstart = currentline;
+  for(iter = 1,i = 0; iter < yyleng; iter++ )
+  {
+    if(yytext[iter] == '\'')
+    {
+      break;
+    }
+    else
+    {
+      numformatter[i] = yytext[iter];
+      i++;
+      if(yytext[iter] == '\n')
+      {
+        currentline++;
+      }
+    }
+  }
+  REJECT;
+}
+['][^']*[']	     {    
+  printf("%d tSTRING (%s)\n", stringstart, numformatter);
+}
+.   printf("");
+%%
+
+int main()
+{
+  yylex();
+  return(0);
+}
